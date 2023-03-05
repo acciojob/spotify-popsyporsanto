@@ -49,15 +49,21 @@ public class SpotifyRepository {
     public Artist createArtist(String name) {
         Artist artist = new Artist();
         artist.setName(name);
+        artist.setLikes(0);
 
+        artists.add(artist);
         return artist;
     }
 
     public Album createAlbum(String title, String artistName) {
-
         Artist artist1 = null;
 
-
+        for(Artist artist:artists){
+            if(artist.getName()==artistName){
+                artist1=artist;
+                break;
+            }
+        }
         if(artist1==null){
             artist1 = createArtist(artistName);
 
@@ -79,6 +85,7 @@ public class SpotifyRepository {
             album.setTitle(title);
             album.setReleaseDate(new Date());
 
+            albums.add(album);
 
             List<Album> l = artistAlbumMap.get(artist1);
             if(l == null){
@@ -89,14 +96,15 @@ public class SpotifyRepository {
 
             return album;
         }
-
-
     }
-
-
     public Song createSong(String title, String albumName, int length) throws Exception{
         Album album = null;
-
+        for(Album album1:albums){
+            if(album1.getTitle()==albumName){
+                album=album1;
+                break;
+            }
+        }
         if(album==null)
             throw new Exception("Album does not exist");
         else {
@@ -123,7 +131,12 @@ public class SpotifyRepository {
 
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
         User user = null;
-
+        for(User user1:users){
+            if(user1.getMobile()==mobile){
+                user=user1;
+                break;
+            }
+        }
         if(user==null)
             throw new Exception("User does not exist");
         else {
@@ -163,9 +176,15 @@ public class SpotifyRepository {
 
 
 
+
     public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
         User user = null;
-
+        for(User user1:users){
+            if(user1.getMobile()==mobile){
+                user=user1;
+                break;
+            }
+        }
         if(user==null)
             throw new Exception("User does not exist");
         else {
@@ -205,7 +224,12 @@ public class SpotifyRepository {
 
     public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
         User user = null;
-
+        for(User user1:users){
+            if(user1.getMobile()==mobile){
+                user=user1;
+                break;
+            }
+        }
         if(user==null)
             throw new Exception("User does not exist");
 
@@ -245,12 +269,22 @@ public class SpotifyRepository {
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
         User user = null;
-
+        for(User user1:users){
+            if(user1.getMobile()==mobile){
+                user=user1;
+                break;
+            }
+        }
         if(user==null)
             throw new Exception("User does not exist");
 
         Song song = null;
-
+        for(Song song1:songs){
+            if(song1.getTitle()==songTitle){
+                song=song1;
+                break;
+            }
+        }
         if (song==null)
             throw new Exception("Song does not exist");
 
@@ -322,7 +356,12 @@ public class SpotifyRepository {
         int max = 0;
         Artist artist1=null;
 
-
+        for(Artist artist:artists){
+            if(artist.getLikes()>=max){
+                artist1=artist;
+                max = artist.getLikes();
+            }
+        }
         if(artist1==null)
             return null;
         else
@@ -335,12 +374,15 @@ public class SpotifyRepository {
         int max=0;
         Song song = null;
 
-
+        for(Song song1:songLikeMap.keySet()){
+            if(song1.getLikes()>=max){
+                song=song1;
+                max = song1.getLikes();
+            }
+        }
         if(song==null)
             return null;
         else
             return song.getTitle();
     }
 }
-
-
